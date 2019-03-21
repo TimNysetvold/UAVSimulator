@@ -1,0 +1,15 @@
+#!/bin/bash
+
+for repeats in {1..2}
+do
+for radius in {7..8..1}
+do
+for angle in {75..90..15}
+do
+echo ${repeat}
+echo ${radius}*.1
+echo ${angle}
+sbatch repeator  ${radius}*.1 ${angle} 
+done
+done
+done

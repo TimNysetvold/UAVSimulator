@@ -1,0 +1,14 @@
+#!/bin/bash
+for repeats in {1..2}
+do
+for numdrones in {100..150..25}
+do
+for separation in {6..8..1}
+do
+echo ${repeat}
+echo ${numdrones}
+echo ${separation}*.1
+sg fslg_dronesim "sbatch repeator  ${numdrones} ${separation}*.1 "
+done
+done
+done
