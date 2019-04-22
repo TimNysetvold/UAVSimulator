@@ -8,7 +8,6 @@ function finalobjective = PotentialFieldsZActive(j,dronearray,conflictindex,ship
 % 16. separation standard, 17. pause, 18. loiter]
 
 ownship=dronearray(j,:);
-shipobjective=shipobjective{j,1};
 repulseforce=zeros(3,1);
 radius=ownship(16);
 attractforce=zeros(3,1);
@@ -20,6 +19,10 @@ z=ownship(3);
 r=1;
 a=10;
 g=1;
+
+conflictindex = checkTrajectory(j, dronearray, conflictindex, shipobjective);
+
+shipobjective=shipobjective{j,1};
 
 for i=1:size(conflictindex,1)
     %Finds distance between ownship and each conflicting drone. It is
