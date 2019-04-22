@@ -1,4 +1,4 @@
-function finalobjective = PotentialFieldsZActive(j,dronearray,conflictindex,shipobjective)
+function finalobjective = PotentialFieldsZActive(j,dronearray,conflictindex,shipobjective, collisiondistance)
 
 % each drone has is a 18-1 vector of the pattern
 % [1. xposition, 2. yposition, 3. zposition,
@@ -20,7 +20,7 @@ r=1;
 a=10;
 g=1;
 
-conflictindex = checkTrajectory(j, dronearray, conflictindex, shipobjective);
+conflictindex = checkTrajectory(j, dronearray, conflictindex, shipobjective, collisiondistance);
 
 shipobjective=shipobjective{j,1};
 

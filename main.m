@@ -194,7 +194,7 @@ for currentIteration=1:iterations
             %it, then this array will be empty and we'll ignore it.
             if (~isempty(curconflicts))
             %Use an algorithm like Chain, A*, or LMA here
-            intermediatearray(dronenum,1:4)=PotentialFieldsZActive(dronenum,totaldronearray,curconflicts,patharray);
+            intermediatearray(dronenum,1:4)=PotentialFieldsZActive(dronenum,totaldronearray,curconflicts,patharray, collisiondistance);
             end
        end
        %must create a method for drones who are avoiding
