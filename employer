@@ -1,14 +1,18 @@
 #!/bin/bash
-for repeats in {1..2}
+
+dronenums1=100
+droneaccel2=0
+droneinfringement3=0
+for repeats in {1..5}
 do
-for numdrones in {100..150..25}
+for dronechanger1 in {0..5}
 do
-for separation in {6..8..1}
+for dronechanger2 in {1..10}
 do
 echo ${repeat}
-echo ${numdrones}
-echo ${separation}*.1
-sg fslg_dronesim "sbatch repeator  ${numdrones} ${separation}*.1 "
+echo ${dronechanger1}*.1
+echo ${dronechanger2}*.0001
+sbatch droneapocalypse30trials  ${dronenums1} ${dronechanger2}*.0001 ${dronechanger1}*.2+1
 done
 done
 done

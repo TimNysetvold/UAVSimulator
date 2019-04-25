@@ -28,10 +28,12 @@ conflictindex=[];
         index=find(distances(i,:)<collisiondistance);
         %index now contains the drone number for the drones that are in
         %conflict with drone i.
+        %This is 2-10 for the first iteration. not 1 because NAN
         
         allconflictspriority=totaldronearray(index,15);
         %stubarray holds the priorities of drones in conflict with the
         %current i drone.
+        %These are all 2 for the first iteration
         
         highpriorityconflictsindexofindexes=find(allconflictspriority<=totaldronearray(i,15));
 

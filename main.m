@@ -1,4 +1,4 @@
- function numcrashes = main (input1,input2,input3)
+ function numcrashes = main (input1,input2)
 %This is the base code for the drone
 %simulator for use by Dr. John Salmon.
 %Written by Tim Nysetvold.
@@ -12,9 +12,7 @@ scurr=rng;
 
 %% Basic parameters for simulation.
 % 1 iteration is equal to 0.1 second of flight time in simulation.
-iterations=288000+9000; %5 hours, plus the required 15 minutes (9000
-% iterations) of warm-up time.
-% iterations=9000; should be sufficenit
+iterations=288000; %5 hours
 collisiondistance=.15;
 % the FAA has declared the "near miss" distance for drones to be 500 ft
 % (150 meters). This would have a value of .15 in this sim.
@@ -23,7 +21,7 @@ metalcollisiondistance=.015;
 % We use this metric to determine when a metal-on-metal crash would actually be likely.
 baselength=10;
 altlength=1;
-layers=input3;
+layers=1;
 % The base length determines the size of the city the drones inhabit. It is
 % given in kilometers. 
 
@@ -154,8 +152,19 @@ markeddrones=1:2:(input1);
 %markeddrones=[markeddrones,(input1*2):(input1*2)+3];
 %markeddrones=1:11;
 
+
+
+count = 0;
+
+
 %% Begin main control loop
 for currentIteration=1:iterations
+    
+    count = count + 1;
+    if(mod(count,100)==0)
+        count=count;
+    end
+    
     %This is the main control loop for the simulation. Each pass through
     %the loop is one tick.
         
@@ -179,10 +188,10 @@ for currentIteration=1:iterations
     %superior
     
     %% Graphing section
-%     linecapture.x=[linecapture.x,totaldronearray(markeddrones,1)];
-%     linecapture.y=[linecapture.y,totaldronearray(markeddrones,2)];
-%     linecapture.z=[linecapture.z,totaldronearray(markeddrones,3)];
-%     graphDrones(totaldronearray,patharray,newcrashes,linecapture,baselength)
+    linecapture.x=[linecapture.x,totaldronearray(markeddrones,1)];
+    linecapture.y=[linecapture.y,totaldronearray(markeddrones,2)];
+    linecapture.z=[linecapture.z,totaldronearray(markeddrones,3)];
+    graphDrones(totaldronearray,patharray,newcrashes,linecapture,baselength)
 
     %% In this section, each drone moves.
     for dronenum=1:sum(numdrones)
@@ -240,15 +249,6 @@ for currentIteration=1:iterations
     
    %Find how many drones are in the air.
    activedrones(currentIteration)=nnz(~totaldronearray(:,12));
-   
-   %% If necessary, end the warmup period.
-
-        if currentIteration==9000 %should be 9000 for a 15-minute warm up
-           metalcrashes=[];
-            faacrashes=0;
-            conflictsrecord=0;
-            objectivesreached=0;
-        end
        
 end
 %% Begin saving
@@ -260,16 +260,16 @@ k=0;
 name = 'fail'; 
 while newname==0
     k=k+1;
-    name=(strcat('zzz',num2str(numdrones(1)),'UAVs',num2str(input2),'dist',num2str(k),'rep.mat'));
-    if ~exist((strcat('zzz',num2str(numdrones(1)),'UAVs',num2str(input2),'dist',num2str(k),'rep.mat')))
+    name=(strcat('zzz',num2str(numdrones(1)),'pol',num2str(input2),'accel',num2str(input3),'maxspeed',num2str(k),'rep.mat'));
+    if ~exist((strcat('zzz',num2str(numdrones(1)),'pol',num2str(input2),'accel',num2str(input3),'maxspeed',num2str(k),'rep.mat')))
         break;
     end
 end
 save(name)
 %now, for ease of crunching, drop the crashes into here.
-numcrashes=[size(metalcrashes,1),faacrashes,conflictsrecord,input1,input2,objectivesreached]
+numcrashes=[size(metalcrashes,1),faacrashes,conflictsrecord,input1,input2,input3,objectivesreached]
 dlmwrite('totalcrashesdata.csv',numcrashes,'-append')
-exit
+
 
 
 
