@@ -24,45 +24,56 @@ conflictindex = checkTrajectory(j, dronearray, conflictindex, shipobjective, col
 
 shipobjective=shipobjective{j,1};
 
-for i=1:size(conflictindex,1)
-    %Finds distance between ownship and each conflicting drone. It is
-    %easier to do this here than to import the data from the
-    %conflictsarray; passing a huge array is not worth it    
-    
-    curconflictdrone=dronearray(conflictindex(i),:);
-    xo=curconflictdrone(1);
-    yo=curconflictdrone(2);
-    zo=curconflictdrone(3);
-    
-    xdist=x-xo;
-    ydist=y-yo;
-    zdist=z-zo;
-    totaldist=sqrt(xdist^2+ydist^2+zdist^2);
-    direction=[(xdist);(ydist);(zdist)];
-    direction=direction/norm(direction);
-    
-    
-%     thisdronerepulsex=sign(xdist)*exp(-1/2*(xdist)^2)+(radius)*exp(-1/2*(radius)^2)*direction(1);
-%     thisdronerepulsey=sign(ydist)*exp(-1/2*(ydist)^2)+(radius)*exp(-1/2*(radius)^2)*direction(2);
-%     thisdronerepulsez=sign(zdist)*exp(-1/2*(zdist)^2)+(radius)*exp(-1/2*(radius)^2)*direction(3);
-    %thisdronerepulsez=0;
-    
-    
-    
-    thisdronerepulsex=sign(xdist)*exp(-1/2*(xdist/radius)^2);
-    thisdronerepulsey=sign(ydist)*exp(-1/2*(ydist/radius)^2);
-    thisdronerepulsez=sign(zdist)*exp(-1/2*(zdist/radius)^2);
-    
-    repulseforce(1)=repulseforce(1)+thisdronerepulsex;
-    repulseforce(2)=repulseforce(2)+thisdronerepulsey;
-    repulseforce(3)=repulseforce(3)+thisdronerepulsez;
-    
-    
-end
 
-repulseforce=repulseforce/norm(repulseforce);
-scaling_factor=radius/abs(totaldist);
-repulseforce=repulseforce*r*scaling_factor;
+try
+
+    for i=1:size(conflictindex,1)
+        %Finds distance between ownship and each conflicting drone. It is
+        %easier to do this here than to import the data from the
+        %conflictsarray; passing a huge array is not worth it    
+
+        %curconflictdrone=dronearray(conflictindex(i),:);
+        xo=curconflictdrone(1);
+        yo=curconflictdrone(2);
+        zo=curconflictdrone(3);
+
+        xdist=x-xo;
+        ydist=y-yo;
+        zdist=z-zo;
+        totaldist=sqrt(xdist^2+ydist^2+zdist^2);
+        direction=[(xdist);(ydist);(zdist)];
+        direction=direction/norm(direction);
+
+
+    %     thisdronerepulsex=sign(xdist)*exp(-1/2*(xdist)^2)+(radius)*exp(-1/2*(radius)^2)*direction(1);
+    %     thisdronerepulsey=sign(ydist)*exp(-1/2*(ydist)^2)+(radius)*exp(-1/2*(radius)^2)*direction(2);
+    %     thisdronerepulsez=sign(zdist)*exp(-1/2*(zdist)^2)+(radius)*exp(-1/2*(radius)^2)*direction(3);
+        %thisdronerepulsez=0;
+
+
+
+        thisdronerepulsex=sign(xdist)*exp(-1/2*(xdist/radius)^2);
+        thisdronerepulsey=sign(ydist)*exp(-1/2*(ydist/radius)^2);
+        thisdronerepulsez=sign(zdist)*exp(-1/2*(zdist/radius)^2);
+
+        repulseforce(1)=repulseforce(1)+thisdronerepulsex;
+        repulseforce(2)=repulseforce(2)+thisdronerepulsey;
+        repulseforce(3)=repulseforce(3)+thisdronerepulsez;
+
+
+    end
+
+    repulseforce=repulseforce/norm(repulseforce);
+    scaling_factor=radius/abs(totaldist);
+    repulseforce=repulseforce*r*scaling_factor;
+
+catch
+    %set repulseforce to 0 in x y and z
+    %if the conflict array doesn't have anything in it.
+    repulseforce(1) = 0;
+    repulseforce(2) = 0;
+    repulseforce(3) = 0; 
+end
     
 xa=shipobjective(1);
 ya=shipobjective(2);
